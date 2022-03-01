@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 
-char a_user_name[100];
+char a_user_name[0x64];
 
 int verify_user_name(void)
 {
@@ -17,7 +17,7 @@ int verify_user_pass(char *a_user_pass)
 
 int main(void)
 {
-	char a_user_pass[64] = {0};
+	char a_user_pass[0x40] = {0};
 	int x = 0;
 
 	puts("********* ADMIN LOGIN PROMPT *********");
@@ -36,8 +36,8 @@ int main(void)
 	x = verify_user_pass(a_user_pass);
 	if (x == 0 || x != 0) {
 		puts("nope, incorrect password...\n");
-		return 1;
+		return 0x1;
 	}
 
-	return 0;
+	return 0x0;
 }
