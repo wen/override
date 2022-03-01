@@ -12,13 +12,13 @@ int main(int argc, char *argv[])
 
 	scanf("%d", &pass);
 
-	if (input == 0x149c) {
+	if (pass == 0x149c) {
 		puts("\nAuthenticated!");
 		system("/bin/sh");
 	} else {
-		printf("\nInvalid Password!\n");
-		return 1;
+		puts("\nInvalid Password!");
+		return 0x1;
 	}
 
-	return 0;
+	return 0x0;
 }
