@@ -1,11 +1,19 @@
 # level00
 
 ```assembly
-80484de:	e8 ed fe ff ff       	call   80483d0 <__isoc99_scanf@plt>
-80484e3:	8b 44 24 1c          	mov    eax,DWORD PTR [esp+0x1c]
-80484e7:	3d 9c 14 00 00       	cmp    eax,0x149c
+level00@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble main" level00
+0x080484de <+74>:	call   0x80483d0 <__isoc99_scanf@plt>
+0x080484e3 <+79>:	mov    eax,DWORD PTR [esp+0x1c]
+0x080484e7 <+83>:	cmp    eax,0x149c
+0x080484ec <+88>:	jne    0x804850d <main+121>
 ```
 The binary `level00` compares the result of function `scanf` to `0x149c`.
+
+```
+level00@OverRide:~$ echo 'obase=10; ibase=16; 149C' | bc
+5276
+```
+We converted `0x149C` in decimal `5276`.
 
 ```
 level00@OverRide:~$ ./level00

@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
 		system("/bin/sh");
 	} else {
 		puts("\nInvalid Password!");
-		return 0x1;
+		return EXIT_FAILURE;
 	}
 
-	return 0x0;
+	return EXIT_SUCCESS;
 }
