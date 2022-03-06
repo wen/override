@@ -2,7 +2,10 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifndef __APPLE__
 #include <sys/ptrace.h>
+#endif
 
 #define LEN 32
 
@@ -14,6 +17,7 @@ int auth(char *username, unsigned int serial)
 	if (len < 6)
 		return 1;
 
+#ifndef __APPLE__
 	if (ptrace(PTRACE_TRACEME, 0, 1, 0) == -1) {
 		puts("\x1b[32m" ".---------------------------.");
 		puts("\x1b[31m"   "| !! TAMPERING DETECTED !!  |");
@@ -21,6 +25,7 @@ int auth(char *username, unsigned int serial)
 
 		return 1;
 	}
+#endif
 
 	unsigned int hash = (username[3] ^ 0x1337) + 0x5eeded;
 	for (int i = 0; i < len; ++i) {
@@ -29,7 +34,9 @@ int auth(char *username, unsigned int serial)
 		hash += (username[i] ^ hash) % 0x539;
 	}
 
-	//printf("hash: %u\n", hash);
+#ifdef DEBUG
+	printf("username: %s\nserial: %u\n", username, hash);
+#endif
 
 	return serial == hash ? 0 : 1;
 }
