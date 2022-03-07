@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-char a_user_name[0x64];
+char a_user_name[0x64]; // 0804a040 g O .bss	00000064	a_user_name
 
 int verify_user_name(void)
 {
@@ -10,34 +10,34 @@ int verify_user_name(void)
 	return strncmp(a_user_name, "dat_wil", 7);
 }
 
-int verify_user_pass(char *a_user_pass) 
+int verify_user_pass(char *pass) 
 {
-	return strncmp(a_user_pass, "admin", 5);
+	return strncmp(pass, "admin", 5);
 }
 
 int main(void)
 {
-	char a_user_pass[0x40] = {0};
-	int x = 0;
+	char pass[0x40] = {0};
+	int ret;
 
 	puts("********* ADMIN LOGIN PROMPT *********");
 	printf("Enter Username: ");
 	fgets(a_user_name, 0x100, stdin);
-
-	x = verify_user_name();
-	if (x != 0) {
+	// 0x08048519 <+73>:	mov    DWORD PTR [esp+0x4],0x100
+	ret = verify_user_name();
+	if (ret != 0) {
 		puts("nope, incorrect username...\n");
-		return 1;
+		return EXIT_FAILURE;
 	}
 
 	puts("Enter Password: ");
-	fgets(a_user_pass, 0x64, stdin);
-
-	x = verify_user_pass(a_user_pass);
-	if (x == 0 || x != 0) {
+	fgets(pass, 0x64, stdin);
+	// 0x08048565 <+149>:	mov    DWORD PTR [esp+0x4],0x64
+	ret = verify_user_pass(pass);
+	if (ret == 0 || ret != 0) {
 		puts("nope, incorrect password...\n");
-		return 0x1;
+		return EXIT_FAILURE;
 	}
 
-	return 0x0;
+	return EXIT_SUCCESS;
 }

