@@ -27,14 +27,12 @@ int main(int argc, char *argv[])
 	puts("/***************************************\\");
 	puts("| You must login to access this system. |");
 	puts("\\**************************************/");
-
 	printf("--[ Username: ");
 	fgets(user, 100, stdin);
 	user[strcspn(user, "\n")] = '\0';    
 	printf("--[ Password: ");
-	fgets(pass, sizeof(pass), stdin);
+	fgets(pass, 100, stdin);
 	pass[strcspn(pass, "\n")] = '\0';
-
 	puts("*****************************************");
 
 	if (!strncmp(dotpass, pass, LEN)) {
