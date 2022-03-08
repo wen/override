@@ -1,5 +1,9 @@
 # level00
 
+The program reads a number from stdin, then check if it's the correct one.
+
+## Step 1. Find the right number
+
 ```assembly
 level00@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble main" level00
 0x080484de <+74>:	call   0x80483d0 <__isoc99_scanf@plt>
@@ -15,6 +19,8 @@ level00@OverRide:~$ echo 'obase=10; ibase=16; 149C' | bc
 ```
 We converted `0x149C` in decimal `5276`.
 
+## Step 2. Input the number
+
 ```
 level00@OverRide:~$ ./level00
 ***********************************
@@ -28,4 +34,3 @@ level01
 $ cat /home/users/$(whoami)/.pass
 uSq2ehEGT6c9S24zbshexZQBXUGrncxn5sD5QfGL
 ```
-Login with password `5276`.
