@@ -8,6 +8,12 @@
 void decrypt(unsigned int key)
 {
 	char str[LEN] = "Q}|u`sfg~sf{}|a3";
+	/*
+	0x08048673 <+19>:	mov    DWORD PTR [ebp-0x1d],0x757c7d51
+	0x0804867a <+26>:	mov    DWORD PTR [ebp-0x19],0x67667360
+	0x08048681 <+33>:	mov    DWORD PTR [ebp-0x15],0x7b66737e
+	0x08048688 <+40>:	mov    DWORD PTR [ebp-0x11],0x33617c7d
+	*/
 
 	for (int i = 0; i != LEN - 1; ++i)
 		str[i] ^= key;
@@ -56,7 +62,7 @@ int main(void)
 	printf("Password:");
 
 	scanf("%d", &pass);
-	test(pass, 0x1337d00d);
+	test(pass, 0x1337d00d); // 0x080488ca <+112>: mov DWORD PTR [esp+0x4],0x1337d00d
 
 	return EXIT_SUCCESS;
 }
