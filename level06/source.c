@@ -18,11 +18,10 @@ int auth(char *username, unsigned int serial)
 		return 1;
 
 #ifndef __APPLE__
-	if (ptrace(PTRACE_TRACEME, 0, 1, 0) == -1) {
+	if (ptrace(0, 0, 1, 0) == -1) {
 		puts("\x1b[32m" ".---------------------------.");
 		puts("\x1b[31m"   "| !! TAMPERING DETECTED !!  |");
 		puts("\x1b[32m" "'---------------------------'");
-
 		return 1;
 	}
 #endif
