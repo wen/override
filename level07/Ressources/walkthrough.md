@@ -1,4 +1,30 @@
-To calculate the offset `0x1d0 - 0x24 + 0x8 + 0x4(ebx) + 0x4(esi) + 0x4(edi) + 0x4(ebp)`
+# level07
+
+## Step 1
+Calculate the offset `0x1d0 - 0x24 + 0x8 + 0x4(ebx) + 0x4(esi) + 0x4(edi) + 0x4(ebp)`
+
+## Step 2
+```
+level07@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble store_number" level07
+Dump of assembler code for function store_number:
+[...]
+   0x08048666 <+54>:	call   0x80485e7 <get_unum>
+   0x0804866b <+59>:	mov    DWORD PTR [ebp-0xc],eax
+[...]
+   0x080486c2 <+146>:	mov    eax,DWORD PTR [ebp-0xc]
+   0x080486c5 <+149>:	shl    eax,0x2
+   0x080486c8 <+152>:	add    eax,DWORD PTR [ebp+0x8]
+   0x080486cb <+155>:	mov    edx,DWORD PTR [ebp-0x10]
+   0x080486ce <+158>:	mov    DWORD PTR [eax],edx
+   0x080486d0 <+160>:	mov    eax,0x0
+   0x080486d5 <+165>:	leave
+   0x080486d6 <+166>:	ret
+End of assembler dump.
+```
+```
+114 << 2 = X << 2
+```
+The disassembly code shows that the program use bitwise left shift
 
 ```
 level07@OverRide:~$ gdb -q level07
