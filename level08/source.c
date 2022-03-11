@@ -40,8 +40,12 @@ int main(int argc, char *argv[])
 
 	strcpy(buf, BACKUPDIR);
 	strncat(buf, argv[1], 100 - strlen(buf) - 1);
-	int fd = open(buf, O_CREAT | O_EXCL | O_WRONLY, \
-			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+	int fd = open(buf, O_CREAT | O_EXCL | O_WRONLY, 0660);
+	/*
+		0x0000000000400b86 <+406>:	mov    edx,0x1b0
+		0x0000000000400b8b <+411>:	mov    esi,0xc1
+		O_CREAT | O_EXCL | O_WRONLY => 0100 | 0200 | 01 => 0301 => 0xc1
+	*/
 	if (fd < 0) {
 		printf("ERROR: Failed to open %s%s\n", BACKUPDIR, argv[1]);
 		exit(EXIT_FAILURE);
