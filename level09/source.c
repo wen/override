@@ -23,11 +23,9 @@ void set_username(struct packet *p)
 
 	puts(">: Enter your username");
 	printf(">>: ");
-
 	fgets(buf, 128, stdin);
 	for (int i = 0; i <= 40 && buf[i]; ++i)
 		p->username[i] = buf[i];
-
 	printf(">: Welcome, %s", p->username);
 }
 
@@ -37,7 +35,6 @@ void set_msg(struct packet *p)
 
 	puts(">: Msg @Unix-Dude\n");
 	printf(">>: ");
-
 	fgets(buf, 1024, stdin);
 	strncpy(p->msg, buf, p->len);
 }
@@ -51,8 +48,6 @@ void handle_msg(void)
 	set_username(&p);
 	set_msg(&p);
 	puts(">: Msg sent!");
-
-	return;
 }
 
 int main(void)
