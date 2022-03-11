@@ -2,7 +2,7 @@
 
 The program reads a username and a message from stdin. It also has a secret function `secret_backdoor`.
 
-# Step 1. Mesure struct size
+## Step 1. Mesure struct size
 ```assembly
 level09@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble handle_msg" level09
 Dump of assembler code for function handle_msg:
