@@ -4,6 +4,26 @@ The program reads username and password from stdin and always prints incorrect p
 
 ## Step 1 Find the right username and password
 ```
+level01@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble verify_user_name" level01
+[...]
+   0x0804847d <+25>:	mov    eax,0x80486a8
+   0x08048482 <+30>:	mov    ecx,0x7
+   0x08048487 <+35>:	mov    esi,edx
+   0x08048489 <+37>:	mov    edi,eax
+   0x0804848b <+39>:	repz cmps BYTE PTR ds:[esi],BYTE PTR es:[edi]
+[...]
+level01@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble verify_user_pass" level01
+[...]
+   0x080484ad <+10>:	mov    eax,0x80486b0
+   0x080484b2 <+15>:	mov    ecx,0x5
+   0x080484b7 <+20>:	mov    esi,edx
+   0x080484b9 <+22>:	mov    edi,eax
+   0x080484bb <+24>:	repz cmps BYTE PTR ds:[esi],BYTE PTR es:[edi]
+[...]
+```
+By disassembling these two verification function, we found the address of username and password.
+
+```
 level01@OverRide:~$ gdb -batch -ex "x/s 0x80486a8" level01
 0x80486a8:	 "dat_wil"
 level01@OverRide:~$ gdb -batch -ex "x/s 0x80486b0" level01
