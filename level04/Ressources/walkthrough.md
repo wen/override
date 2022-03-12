@@ -6,10 +6,7 @@ The program uses `gets` function to read stdin without checking size.
 ```assembly
 level04@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble main" level04
 Dump of assembler code for function main:
-   0x080486c8 <+0>:	push   ebp
-   0x080486c9 <+1>:	mov    ebp,esp
-   0x080486cb <+3>:	push   edi
-   0x080486cc <+4>:	push   ebx
+[...]
    0x080486cd <+5>:	and    esp,0xfffffff0
    0x080486d0 <+8>:	sub    esp,0xb0
 [...]
