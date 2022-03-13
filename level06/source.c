@@ -28,7 +28,7 @@ int auth(char *username, unsigned int serial)
 
 	unsigned int hash = (username[3] ^ 0x1337) + 0x5eeded;
 	for (int i = 0; i < len; ++i) {
-		if (username[i] < 32 || username[i] > 127)
+		if (username[i] < 32)
 			return 1;
 		hash += (username[i] ^ hash) % 0x539;
 	}

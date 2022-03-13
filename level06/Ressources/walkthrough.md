@@ -8,11 +8,11 @@ level06@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemb
 [...]
    0x080487b5 <+109>:	call   0x80485f0 <ptrace@plt>
    0x080487ba <+114>:	cmp    eax,0xffffffff
-   0x080487bd <+117>:	jne    0x80487ed <auth+165>
+=> 0x080487bd <+117>:	jne    0x80487ed <auth+165>
 [...]
    0x08048863 <+283>:	mov    eax,DWORD PTR [ebp+0xc]
    0x08048866 <+286>:	cmp    eax,DWORD PTR [ebp-0x10]
-   0x08048869 <+289>:	je     0x8048872 <auth+298>
+=> 0x08048869 <+289>:	je     0x8048872 <auth+298>
    0x0804886b <+291>:	mov    eax,0x1
    0x08048870 <+296>:	jmp    0x8048877 <auth+303>
    0x08048872 <+298>:	mov    eax,0x0
