@@ -47,12 +47,12 @@ The username is correct, but we couldn't login.
 ```assembly
 level01@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble main" level01
 [...]
-0x0804856d <+157>:	lea    eax,[esp+0x1c]
-0x08048571 <+161>:	mov    DWORD PTR [esp],eax
-0x08048574 <+164>:	call   0x8048370 <fgets@plt>
-0x08048579 <+169>:	lea    eax,[esp+0x1c]
-0x0804857d <+173>:	mov    DWORD PTR [esp],eax
-0x08048580 <+176>:	call   0x80484a3 <verify_user_pass>
+   0x0804856d <+157>:	lea    eax,[esp+0x1c]
+   0x08048571 <+161>:	mov    DWORD PTR [esp],eax
+=> 0x08048574 <+164>:	call   0x8048370 <fgets@plt>
+   0x08048579 <+169>:	lea    eax,[esp+0x1c]
+   0x0804857d <+173>:	mov    DWORD PTR [esp],eax
+   0x08048580 <+176>:	call   0x80484a3 <verify_user_pass>
 [...]
 ```
 ```

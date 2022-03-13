@@ -4,9 +4,9 @@ This program is a simple number storage system. It stores and reads number in an
 
 ## Step 1. Calculate offset to overwrite `eip`
 ```assembly
-0x08048924 <+513>:	lea    eax,[esp+0x24]
-0x08048928 <+517>:	mov    DWORD PTR [esp],eax
-0x0804892b <+520>:	call   0x80486d7 <read_number>
+   0x08048924 <+513>:	lea    eax,[esp+0x24]
+   0x08048928 <+517>:	mov    DWORD PTR [esp],eax
+=> 0x0804892b <+520>:	call   0x80486d7 <read_number>
 ```
 ```
 level07@OverRide:~$ gdb -q level07

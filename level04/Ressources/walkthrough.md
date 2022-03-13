@@ -6,9 +6,9 @@ The program uses `gets` function to read stdin without checking size.
 ```assembly
 level04@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble main" level04
 [...]
-0x08048757 <+143>:	lea    eax,[esp+0x20]
-0x0804875b <+147>:	mov    DWORD PTR [esp],eax
-0x0804875e <+150>:	call   0x80484b0 <gets@plt>
+   0x08048757 <+143>:	lea    eax,[esp+0x20]
+   0x0804875b <+147>:	mov    DWORD PTR [esp],eax
+=> 0x0804875e <+150>:	call   0x80484b0 <gets@plt>
 [...]
 ```
 ```
