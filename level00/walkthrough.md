@@ -1,6 +1,6 @@
 # level00
 
-The program reads a number from stdin, then check if it's the correct one.
+The program reads a number from stdin, and checks if it's the magic number.
 
 ## Step 1. Find the right number
 
