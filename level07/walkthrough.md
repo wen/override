@@ -86,6 +86,7 @@ system:  0xf7e6aed0 => 4159090384
 exit:    0xf7e5eb70 => 4159040368
 /bin/sh: 0xf7f897ec => 4160264172
 ```
+We found all 3 pointers to perform ret2libc.
 
 ## Step 4. Input numbers into system
 ```
