@@ -1,6 +1,6 @@
 # level06
 
-The program reads a username and a serial number from stdin. It uses a magic algorithm to calculate a hash based on username then compares the hash to user's input serial number. Besides that, the binary calls `ptrace` to prevent us from using GDB.
+The program reads a username and a serial number from stdin. It uses an unknown algorithm to calculate a hash based on username then compares the hash with user's input serial number. Besides that, the binary calls `ptrace` to prevent us from using GDB.
 
 ## Step 1. Set GDB breakpoint
 ```
@@ -21,7 +21,7 @@ level06@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemb
 Breakpoint 1: 0x080487bd => Jump to 0x080487ed
 Breakpoint 2: 0x08048869 => Show value in stack to get hash
 ```
-After calling `ptrace`, the program compares the return value of `ptrace` to `-1`, so we set first breakpoint `0x080487bd` before jump not equal instruction then jump to `0x80487ed`. Next, we set breakpoint `0x08048869` after the whole magic calculation procedure and before jump equal instruction.
+After calling `ptrace`, the program compares the return value of `ptrace` with `-1`, so we set first breakpoint `0x080487bd` before jump-not-equal instruction then jump to `0x80487ed`. Next, we set breakpoint `0x08048869` after the whole magic calculation procedure and before jump-equal instruction.
 
 ## Step 2. Run the program in GDB
 ```
