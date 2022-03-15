@@ -13,7 +13,7 @@ level00@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemb
 0x080484ec <+88>:	jne    0x804850d <main+121>
 [...]
 ```
-The binary `level00` compares the result of function `scanf` to `0x149c`.
+The binary compares the result of function `scanf` with `0x149c`.
 
 ```
 level00@OverRide:~$ echo 'obase=10; ibase=16; 149C' | bc
