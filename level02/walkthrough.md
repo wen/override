@@ -1,6 +1,6 @@
 # level02
 
-The program reads a username and a password from stdin, then it compares the password to the real password read from `/home/users/level03/.pass`. If two password don't match, the binary will print username by calling `printf(username)` directly with our input username as format string.
+The program reads a username and a password from stdin, then it compares the password with the flag read from `/home/users/level03/.pass`. If they don't match, the binary will print username by calling `printf(username)` directly with our input username as format string.
 
 ## Step 1. Find real password in stack
 ```
