@@ -1,6 +1,6 @@
 # level01
 
-The program reads username and password from stdin and always prints incorrect password.
+The program reads username and password from stdin and always prints `nope, incorrect password...`.
 
 ## Step 1. Find the right username and password
 ```assembly
