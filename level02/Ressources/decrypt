@@ -1,6 +1,0 @@
-#!/bin/sh
-for fragment in $1
-do
-	echo $fragment | xxd -r | rev | tr -d "\n"
-done
-echo

