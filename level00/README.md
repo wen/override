@@ -16,7 +16,7 @@ level00@OverRide:~$ gdb -batch -ex "set disassembly-flavor intel" -ex "disassemb
 The binary compares the result of function `scanf` with `0x149c`.
 
 ```
-level00@OverRide:~$ echo 'obase=10; ibase=16; 149C' | bc
+level00@OverRide:~$ perl -le 'print 0x149c'
 5276
 ```
 We converted `0x149c` in decimal `5276`.
